@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Grocery Store</title>
+    <link rel="stylesheet" href="css/registration.css">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="welcome-section">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" alt="Grocery Shopping" class="welcome-image">
+            <div class="welcome-content">
+                <h1 class="welcome-title">Welcome to Our Grocery Store</h1>
+                <p class="welcome-text">Join our community of happy customers and enjoy seamless grocery shopping experience with exclusive offers and fast delivery.</p>
+            </div>
+        </div>
+        <div class="form-section">
+            <div class="form-header">
+                <h2 class="form-title">Create Your Account</h2>
+                <p class="form-subtitle">Fill in your details to get started</p>
+            </div>
+           <!-- Update the form section in your HTML -->
+<form id="registrationForm">
+    <div class="form-group">
+        <label for="name" class="form-label">Customer Name</label>
+        <input type="text" class="form-control" id="name" required 
+               pattern="^[A-Za-z ]+$" 
+               oninput="validateName(this)">
+        <div class="invalid-feedback">Name must have alphabets only</div>
+    </div>
+    <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" required
+               oninput="validateEmail(this)">
+        <div class="invalid-feedback">Email id not valid</div>
+    </div>
+    <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" required
+               oninput="validatePassword(this)">
+        <div class="invalid-feedback">Password must contain at least one uppercase, one number, and one special character</div>
+    </div>
+    <div class="form-group">
+        <label for="address" class="form-label">Address</label>
+        <textarea class="form-control" id="address" rows="3" required
+                  oninput="validateAddress(this)"></textarea>
+        <div class="invalid-feedback">Address cannot be empty</div>
+    </div>
+    <div class="form-group">
+        <label for="contact" class="form-label">Contact Number</label>
+        <input type="tel" class="form-control" id="contact" required
+               pattern="[0-9]{10}"
+               oninput="validateContact(this)">
+        <div class="invalid-feedback">Contact number must be 10 digits</div>
+    </div>
+    <button type="submit" class="btn-primary">Register</button>
+</form>
+            <div class="login-link">
+                <p>Already have an account? <a href="login.html">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Success Modal -->
+    <div id="registrationSuccessModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registration Successful</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="success-message">Customer Registration successful.</p>
+                <div id="registrationDetails">
+                    <!-- Details will be inserted here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closeModalBtn">Close</button>
+                <a href="login.html" class="btn-primary">Login Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/registration.js"></script>
+</body>
+</html>
