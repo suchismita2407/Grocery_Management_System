@@ -14,6 +14,10 @@
         <div class="container">
             <div class="navbar-content">
                 <a href="index.html" class="logo">TATAMart</a>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for products...">
+                    <button id="searchBtn"><i class="fas fa-search"></i></button>
+                </div>
                 <nav class="nav-links">
                     <a href="index.html" class="active">Home</a>
                     <a href="#" id="profileLink">My Profile</a>
@@ -241,35 +245,77 @@
 
     <!-- Modals -->
     <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>My Profile</h3>
-                <button class="close-btn">&times;</button>
+    <!-- Profile Modal -->
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>My Profile</h3>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="profileView">
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">Name:</span>
+                        <span id="profileNameDisplay" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span id="profileEmailDisplay" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Address:</span>
+                        <span id="profileAddressDisplay" class="info-value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone:</span>
+                        <span id="profilePhoneDisplay" class="info-value"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="closeProfileBtn">Close</button>
+                    <button type="button" class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                    <button type="button" class="btn btn-info" id="viewOrdersBtn">View Order History</button>
+                </div>
             </div>
-            <div class="modal-body">
+
+            <div id="editProfileView" style="display: none;">
                 <form id="profileForm">
                     <div class="form-group">
-                        <label for="profileName">Customer Name</label>
-                        <input type="text" id="profileName" disabled>
+                        <label for="profileName">Full Name</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email</label>
+                        <input type="email" id="profileEmail" required>
                     </div>
                     <div class="form-group">
                         <label for="profileAddress">Address</label>
-                        <textarea id="profileAddress" rows="3" disabled></textarea>
+                        <textarea id="profileAddress" rows="3" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="profileContact">Contact Number</label>
-                        <input type="tel" id="profileContact" disabled>
+                        <label for="profilePhone">Phone Number</label>
+                        <input type="tel" id="profilePhone" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="closeProfileBtn">Close</button>
-                        <button type="button" class="btn btn-primary" id="editProfileBtn">Edit</button>
-                        <button type="submit" class="btn btn-success" id="saveProfileBtn" style="display: none;">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
                     </div>
                 </form>
             </div>
+
+            <div id="orderHistoryView" style="display: none;">
+                <h4>Order History</h4>
+                <div id="orderHistoryList" class="order-history-list">
+                    <!-- Orders will be displayed here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="backToProfileBtn">Back to Profile</button>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
     <!-- Cart Modal -->
     <div id="cartModal" class="modal">
@@ -324,19 +370,14 @@
         </div>
     </div>
 
-    <script src="js/products-data.js"></script>
-
-<!-- 3. Core modules (independent functionality) -->
-<script src="js/modals.js"></script>       <!-- Basic modal operations -->
-<script src="js/navbar.js"></script>      <!-- Navigation functionality -->
-
-<!-- 4. Feature modules (depend on core) -->
-<script src="js/cart.js"></script>        <!-- Depends on modals -->
-<script src="js/profile.js"></script>     <!-- Depends on modals -->
-<script src="js/products.js"></script>    <!-- Depends on cart.js -->
-
-
-<!-- 6. Main app initialization (depends on all) -->
+     <!-- Add these before your main.js -->
+<!-- Add these before your main.js -->
+<script src="js/products-data.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/search.js"></script>
+<script src="js/profile.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

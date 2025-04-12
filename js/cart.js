@@ -1,232 +1,97 @@
-// Cart functionality
-document.addEventListener('DOMContentLoaded', () => {
-    // Checkout button
-    document.getElementById('checkoutBtn')?.addEventListener('click', checkout);
+// cart.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Get modal and trigger elements
+  const cartModal = document.getElementById('cartModal');
+  const cartLink = document.getElementById('cartLink');
+  const closeCartBtn = cartModal.querySelector('.close-btn');
+  
+  // Open cart modal when cart icon is clicked
+  if (cartLink) {
+      cartLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          loadCartItems();
+          cartModal.style.display = 'flex';
+          document.body.style.overflow = 'hidden'; // Prevent scrolling
+      });
+  }
+  
+  // Close modal when X button is clicked
+  if (closeCartBtn) {
+      closeCartBtn.addEventListener('click', function() {
+          cartModal.style.display = 'none';
+          document.body.style.overflow = 'auto'; // Re-enable scrolling
+      });
+  }
+  
+  // Close modal when clicking outside
+  cartModal.addEventListener('click', function(e) {
+      if (e.target === cartModal) {
+          cartModal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+      }
   });
   
-  function addToCart(productId) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    if (!cart[currentUser.id]) {
-      cart[currentUser.id] = [];
-    }
-    
-    const existingItem = cart[currentUser.id].find(item => item.productId === productId);
-    
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart[currentUser.id].push({
-        productId,
-        quantity: 1
-      });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
+  // Initialize cart
+  initializeCart();
+});
+
+function initializeCart() {
+  // Create empty cart if it doesn't exist
+  if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', JSON.stringify([]));
   }
+  updateCartCount();
+}
+
+function loadCartItems() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartItemsContainer = document.getElementById('cartItemsContainer');
   
-  function updateCartDisplay() {
-    const cartItemsContainer = document.getElementById('cartItemsContainer');
-    const emptyCartMessage = document.getElementById('emptyCartMessage');
-    const cartSubtotal = document.getElementById('cartSubtotal');
-    const cartTax = document.getElementById('cartTax');
-    const cartTotal = document.getElementById('cartTotal');
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-    
-    const cart = JSON.parse(localStorage.getItem('cart')) || {};
-    const userCart = cart[currentUser.id] || [];
-    
-    if (userCart.length === 0) {
-      emptyCartMessage.style.display = 'block';
-      cartItemsContainer.innerHTML = '';
-      checkoutBtn.disabled = true;
-      return;
-    }
-    
-    emptyCartMessage.style.display = 'none';
-    
-    let itemsHTML = '';
-    let subtotal = 0;
-    
-    userCart.forEach(item => {
-      const product = [...fruitProducts, ...vegetableProducts, ...snackProducts, ...dairyProducts]
-        .find(p => p.id === item.productId);
-      
-      if (product) {
-        const itemTotal = product.price * item.quantity;
-        subtotal += itemTotal;
-        
-        itemsHTML += `
-          <div class="cart-item">
-            <img src="${product.image}" alt="${product.name}" class="cart-item-img">
-            <div class="cart-item-details">
-              <h4 class="cart-item-title">${product.name}</h4>
-              <p class="cart-item-price">₹${product.price} each</p>
-            </div>
-            <div class="cart-item-actions">
-              <button class="decrease-quantity" data-id="${product.id}">-</button>
-              <input type="text" class="quantity-input" value="${item.quantity}" data-id="${product.id}" readonly>
-              <button class="increase-quantity" data-id="${product.id}">+</button>
-              <button class="remove-item" data-id="${product.id}">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-            <div class="cart-item-total">₹${itemTotal.toFixed(2)}</div>
+  // Clear existing items
+  cartItemsContainer.innerHTML = '';
+  
+  if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `
+          <div class="empty-cart">
+              <i class="fas fa-shopping-cart"></i>
+              <p>Your cart is empty</p>
           </div>
-        `;
-      }
-    });
-    
-    cartItemsContainer.innerHTML = itemsHTML;
-    
-    // Add event listeners to quantity buttons
-    document.querySelectorAll('.increase-quantity').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const productId = e.target.dataset.id;
-        updateCartItemQuantity(productId, 1);
-      });
-    });
-    
-    document.querySelectorAll('.decrease-quantity').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const productId = e.target.dataset.id;
-        updateCartItemQuantity(productId, -1);
-      });
-    });
-    
-    document.querySelectorAll('.remove-item').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const productId = e.target.closest('button').dataset.id;
-        removeCartItem(productId);
-      });
-    });
-    
-    // Calculate totals
-    const tax = subtotal * 0.10;
-    const total = subtotal + tax;
-    
-    cartSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
-    cartTax.textContent = `₹${tax.toFixed(2)}`;
-    cartTotal.textContent = `₹${total.toFixed(2)}`;
-    checkoutBtn.disabled = false;
+      `;
+      return;
   }
   
-  function updateCartItemQuantity(productId, change) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    const item = cart[currentUser.id]?.find(item => item.productId === productId);
-    
-    if (item) {
-      item.quantity += change;
+  // Add each cart item to the modal
+  cart.forEach(item => {
+      const cartItem = document.createElement('div');
+      cartItem.className = 'cart-item';
+      cartItem.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="item-details">
+              <h4>${item.name}</h4>
+              <div class="item-price">₹${item.price}</div>
+              <div class="item-quantity">
+                  <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                  <span class="quantity">${item.quantity}</span>
+                  <button class="quantity-btn increase" data-id="${item.id}">+</button>
+              </div>
+          </div>
+          <button class="remove-item" data-id="${item.id}">
+              <i class="fas fa-trash"></i>
+          </button>
+      `;
+      cartItemsContainer.appendChild(cartItem);
       
-      if (item.quantity <= 0) {
-        removeCartItem(productId);
-        return;
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartDisplay();
-      updateCartCount();
-    }
-  }
+      // Add event listeners for quantity buttons
+      cartItem.querySelector('.decrease').addEventListener('click', () => updateQuantity(item.id, -1));
+      cartItem.querySelector('.increase').addEventListener('click', () => updateQuantity(item.id, 1));
+      cartItem.querySelector('.remove-item').addEventListener('click', () => removeItem(item.id));
+  });
   
-  function removeCartItem(productId) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    cart[currentUser.id] = cart[currentUser.id]?.filter(item => item.productId !== productId);
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartDisplay();
-    updateCartCount();
-  }
-  
-  function checkout() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-    
-    const cart = JSON.parse(localStorage.getItem('cart')) || {};
-    const userCart = cart[currentUser.id] || [];
-    
-    if (userCart.length === 0) return;
-    
-    // Create order
-    const orderId = 'ORD-' + Date.now();
-    const orderDate = new Date().toISOString();
-    
-    let subtotal = 0;
-    const orderItems = [];
-    
-    userCart.forEach(item => {
-      const product = [...fruitProducts, ...vegetableProducts, ...snackProducts, ...dairyProducts]
-        .find(p => p.id === item.productId);
-      
-      if (product) {
-        const itemTotal = product.price * item.quantity;
-        subtotal += itemTotal;
-        
-        orderItems.push({
-          productId: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: item.quantity,
-          total: itemTotal
-        });
-      }
-    });
-    
-    const tax = subtotal * 0.10;
-    const total = subtotal + tax;
-    
-    const order = {
-      orderId,
-      userId: currentUser.id,
-      items: orderItems,
-      subtotal,
-      tax,
-      total,
-      date: orderDate,
-      status: 'completed'
-    };
-    
-    // Save order
-    let orders = JSON.parse(localStorage.getItem('orders')) || [];
-    orders.push(order);
-    localStorage.setItem('orders', JSON.stringify(orders));
-    
-    // Clear cart
-    delete cart[currentUser.id];
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
-    
-    // Show order success
-    const orderDetails = document.getElementById('orderDetails');
-    orderDetails.innerHTML = `
-      <div class="order-details">
-        <p><strong>Order ID:</strong> ${orderId}</p>
-        <p><strong>Date:</strong> ${new Date(orderDate).toLocaleString()}</p>
-        <p><strong>Total:</strong> ₹${total.toFixed(2)}</p>
-        <h4 class="order-items-title">Order Items:</h4>
-        <ul class="order-items-list">
-          ${orderItems.map(item => `
-            <li class="order-item">
-              <span>${item.name} x ${item.quantity}</span>
-              <span>₹${item.total.toFixed(2)}</span>
-            </li>
-          `).join('')}
-        </ul>
-      </div>
-    `;
-    
-    closeModal('cartModal');
-    openModal('orderSuccessModal');
-  }
+  updateCartSummary();
+}
+
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const count = cart.reduce((total, item) => total + item.quantity, 0);
+  document.getElementById('cartCount').textContent = count;
+}

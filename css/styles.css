@@ -94,6 +94,49 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
   
+  /* Add to your CSS file */
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  margin: 0 2rem;
+  max-width: 500px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-medium);
+  border-radius: 20px 0 0 20px;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+      order: 3;
+      width: 100%;
+      margin: 1rem 0;
+      max-width: none;
+  }
+  
+  .navbar-content {
+      flex-wrap: wrap;
+  }
+}
+
   /* ===== Navbar Styles ===== */
   .navbar {
     background-color: var(--light-text);
@@ -371,6 +414,107 @@
   .add-btn:hover {
     background-color: var(--dark-color);
   }
+  
+/* Add to your CSS file */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification i {
+  font-size: 1.2rem;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--gray-medium);
+}
+
+.order-detail:last-child {
+  border-bottom: none;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+/* Add to your CSS file */
+.profile-info {
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-medium);
+}
+
+.info-label {
+  font-weight: 600;
+  min-width: 100px;
+  color: var(--dark-color);
+}
+
+.info-value {
+  flex-grow: 1;
+}
+
+.order-history-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+.order-item {
+  background-color: var(--gray-light);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.order-date {
+  color: var(--gray-dark);
+}
+
+.order-total {
+  color: var(--primary-color);
+}
+
+.order-products {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+}
+
   
   /* ===== Features Styles ===== */
   .features {
