@@ -1,4 +1,4 @@
-// products.js
+// products.js - Updated version
 document.addEventListener('DOMContentLoaded', function() {
   // Load products for each category
   loadProductsByCategory('fruits', 'fruits-scroll');
@@ -44,23 +44,16 @@ function createProductCard(product) {
   
   // Add event listener to add button
   const addBtn = card.querySelector('.add-btn');
-  addBtn.addEventListener('click', () => addToCart(product));
+  addBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    addToCart(product);
+  });
   
   return card;
 }
 
-function initializeCart() {
-  // Load cart from localStorage or initialize empty array
-  if (!localStorage.getItem('cart')) {
-      localStorage.setItem('cart', JSON.stringify([]));
-  }
-  
-  // Update cart count
-  updateCartCount();
-}
-
 function addToCart(product) {
-  const cart = JSON.parse(localStorage.getItem('cart'));
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
   const existingItem = cart.find(item => item.id === product.id);
   
   if (existingItem) {
@@ -81,7 +74,7 @@ function addToCart(product) {
 }
 
 function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart'));
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const count = cart.reduce((total, item) => total + item.quantity, 0);
   document.getElementById('cartCount').textContent = count;
 }
