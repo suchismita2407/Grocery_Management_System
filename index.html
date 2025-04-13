@@ -20,7 +20,7 @@
                 </div>
                 <nav class="nav-links">
                     <a href="index.html" class="active">Home</a>
-                    <a href="#" id="profileLink">My Profile</a>
+                    <a href="#" id="profileLink" style="text-transform: capitalize;">My Profile</a>
                     <a href="#" id="cartLink">
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cartCount" class="cart-count">0</span>
@@ -245,12 +245,11 @@
 
     <!-- Modals -->
     <!-- Profile Modal -->
-    <!-- Profile Modal -->
 <div id="profileModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3>My Profile</h3>
-            <button class="close-btn">&times;</button>
+            <button class="close-btn" id="closeProfileBtn">&times;</button>
         </div>
         <div class="modal-body">
             <div id="profileView">
@@ -346,7 +345,7 @@
                             <span>Total:</span>
                             <span id="cartTotal">₹0.00</span>
                         </div>
-                        <button class="btn btn-primary" id="checkoutBtn" disabled>Proceed to Checkout</button>
+                        <button class="btn btn-primary" id="checkoutBtn" >Proceed to Checkout</button>
                     </div>
                 </div>
             </div>
